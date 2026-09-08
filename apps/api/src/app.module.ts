@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module.js';
 import { CommentModule } from './comment/comment.module.js';
 import { TagModule } from './tag/tag.module.js';
 import { LikeModule } from './like/like.module.js';
+import { AuthModule } from './auth/auth.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -33,6 +34,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     CommentModule,
     TagModule,
     LikeModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
