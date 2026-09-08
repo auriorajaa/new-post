@@ -7,11 +7,12 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { PostModule } from "./post/post.module.js";
-import { UserModule } from './user/user.module.js';
-import { CommentModule } from './comment/comment.module.js';
-import { TagModule } from './tag/tag.module.js';
-import { LikeModule } from './like/like.module.js';
-import { AuthModule } from './auth/auth.module.js';
+import { UserModule } from "./user/user.module.js";
+import { CommentModule } from "./comment/comment.module.js";
+import { TagModule } from "./tag/tag.module.js";
+import { LikeModule } from "./like/like.module.js";
+import { AuthModule } from "./auth/auth.module.js";
+import { ConfigModule } from "@nestjs/config";
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -27,6 +28,9 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), "src/graphql/schema.gql"),
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     PrismaModule,
     PostModule,
