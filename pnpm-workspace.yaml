@@ -1,9 +1,10 @@
 packages:
   - "apps/*"
 allowBuilds:
-  '@prisma/engines': set this to true or false
+  '@apollo/protobufjs': true
+  '@prisma/engines': true
   esbuild: true
   msgpackr-extract: false
-  prisma: set this to true or false
+  prisma: true
   unrs-resolver: true
   workerd: false
