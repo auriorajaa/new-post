@@ -4,3 +4,5 @@ export const BACKEND_URL = (() => {
     throw new Error("Missing required environment variable: BACKEND_URL");
   return url;
 })();
+
+export const DEFAULT_PAGE_SIZE = 12;

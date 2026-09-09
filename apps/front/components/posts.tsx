@@ -3,38 +3,44 @@ import React from "react";
 
 import PostCard from "@/components/postCard";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import Link from "next/link";
+
 type Props = {
   posts: Post[];
+  totalPosts: number;
+  currentPage: number;
+  pageSize: number;
 };
 
-const Posts = ({ posts }: Props) => {
+const Posts = ({ posts, totalPosts, currentPage, pageSize }: Props) => {
+  const totalPages = Math.ceil(totalPosts / pageSize);
+
   return (
     <section className="w-full">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
         {/* Section Header */}
-        <div className="mb-10 flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              Discover
-            </p>
+        <div className="mb-10">
+          <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Discover
+          </p>
 
-            <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-              Latest Posts
-            </h2>
-          </div>
-
-          {/* <a
-            href="/articles"
-            className="hidden text-sm font-medium underline-offset-4 hover:underline sm:block"
-          >
-            View all
-          </a> */}
+          <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+            Latest Posts
+          </h2>
         </div>
 
         {/* Posts */}
         {posts.length > 0 ? (
           <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.slice(0, 6).map((post) => (
+            {posts.map((post) => (
               <PostCard key={post.id} {...post} />
             ))}
           </div>
@@ -46,15 +52,37 @@ const Posts = ({ posts }: Props) => {
           </div>
         )}
 
-        {/* Mobile View All */}
-        <div className="mt-10 sm:hidden">
-          <a
-            href="/articles"
-            className="text-sm font-medium underline underline-offset-4"
-          >
-            View all posts
-          </a>
-        </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Pagination className="mt-16">
+            <PaginationContent>
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious href={`/?page=${currentPage - 1}`} />
+                </PaginationItem>
+              )}
+
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      href={`/?page=${page}`}
+                      isActive={page === currentPage}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ),
+              )}
+
+              {currentPage < totalPages && (
+                <PaginationItem>
+                  <PaginationNext href={`/?page=${currentPage + 1}`} />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </section>
   );
