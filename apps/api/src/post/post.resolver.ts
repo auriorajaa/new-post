@@ -8,7 +8,7 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard.js";
 export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Query(() => [Post], { name: "posts" })
   findAll(@Context() context: any) {
     const user = context.req.user;
