@@ -11,7 +11,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import Link from "next/link";
 
 type Props = {
   posts: Post[];
