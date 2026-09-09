@@ -15,7 +15,7 @@ const PostCard = ({
   content,
   createdAt,
 }: Props) => {
-  const href = slug ? `/articles/${slug}/${id}` : "#";
+  const href = slug ? `/blog/${slug}/${id}` : "#";
 
   return (
     <Card className="group overflow-hidden border-0 bg-transparent py-0">
