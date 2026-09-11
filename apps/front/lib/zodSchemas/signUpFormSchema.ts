@@ -5,11 +5,11 @@ export const SignUpFormSchema = z.object({
   email: z.string().email(),
   password: z
     .string()
+    .trim()
     .min(8)
-    .regex(/[a-zA-z]/, { message: "Contain at least one letter" })
+    .regex(/[a-zA-Z]/, { message: "Contain at least one letter" })
     .regex(/[0-9]/, { message: "Contain at least one number" })
-    .regex(/[^a-zA-z0-9]/, {
+    .regex(/[^a-zA-Z0-9]/, {
       message: "Contain at least one special characters",
-    })
-    .trim(),
+    }),
 });

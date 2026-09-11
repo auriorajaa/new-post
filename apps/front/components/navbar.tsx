@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Menu01Icon,
   Search01Icon,
-  ArrowUpRight01Icon,
 } from "@hugeicons/core-free-icons";
 
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -70,11 +69,10 @@ const Navbar = () => {
         <Button
           size="sm"
           className="hidden sm:inline-flex"
-          render={<Link href="/subscribe" />}
+          render={<Link href="/auth/signup" />}
           nativeButton={false}
         >
-          Subscribe
-          <HugeiconsIcon icon={ArrowUpRight01Icon} className="ml-1 size-4" />
+          Sign up
         </Button>
         {/* Mobile Menu */}
         <Sheet>
@@ -109,14 +107,10 @@ const Navbar = () => {
 
               <Button
                 className="mt-6 w-full"
-                render={<Link href="/subscribe" />}
+                render={<Link href="/auth/signup" />}
                 nativeButton={false}
               >
-                Subscribe
-                <HugeiconsIcon
-                  icon={ArrowUpRight01Icon}
-                  className="ml-1 size-4"
-                />
+                Sign up
               </Button>
             </nav>
           </SheetContent>

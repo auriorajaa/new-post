@@ -3,11 +3,11 @@
 import SubmitButton from "@/components/submitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signUp } from "@/lib/actions/auth";
+import { signIn } from "@/lib/actions/auth";
 import { useActionState } from "react";
 
-const SignUpForm = () => {
-  const [state, action] = useActionState(signUp, undefined);
+const SignInForm = () => {
+  const [state, action] = useActionState(signIn, undefined);
 
   return (
     <form action={action} className="space-y-5">
@@ -16,25 +16,12 @@ const SignUpForm = () => {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          name="name"
-          placeholder="Your name"
-          defaultValue={state?.data?.name}
-        />
-        {!!state?.error?.name && (
-          <p className="text-sm text-destructive">{state.error.name}</p>
-        )}
-      </div>
-
-      <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
-          type="email"
           id="email"
           name="email"
           placeholder="email@example.com"
+          type="email"
           defaultValue={state?.data?.email}
         />
         {!!state?.error?.email && (
@@ -51,17 +38,13 @@ const SignUpForm = () => {
           defaultValue={state?.data?.password}
         />
         {!!state?.error?.password && (
-          <ul className="space-y-1 text-sm text-destructive">
-            {state.error.password.map((err) => (
-              <li key={err}>{err}</li>
-            ))}
-          </ul>
+          <p className="text-sm text-destructive">{state.error.password}</p>
         )}
       </div>
 
-      <SubmitButton className="w-full">Sign Up</SubmitButton>
+      <SubmitButton className="w-full">Sign in</SubmitButton>
     </form>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

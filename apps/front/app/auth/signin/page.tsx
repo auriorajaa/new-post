@@ -1,5 +1,5 @@
 import Link from "next/link";
-import SignUpForm from "./_components/signUpForm";
+import SignInForm from "./_components/signInForm";
 import {
   Card,
   CardContent,
@@ -8,26 +8,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const SignUpPage = () => {
+const SignInPage = () => {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Create an account</CardTitle>
+        <CardTitle className="text-2xl">Welcome back</CardTitle>
         <CardDescription>
-          Enter your details below to get started
+          Enter your credentials to sign in to your account
         </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <SignUpForm />
+        <SignInForm />
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
-            href="/auth/signin"
+            href="/auth/signup"
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
-            Sign in
+            Sign up
           </Link>
         </p>
       </CardContent>
@@ -35,4 +35,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;
