@@ -1,12 +1,6 @@
-"use client";
-
-import React from "react";
 import Link from "next/link";
 
-import {
-  Menu01Icon,
-  Search01Icon,
-} from "@hugeicons/core-free-icons";
+import { Menu01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -18,27 +12,20 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { getSession } from "@/lib/session";
+import SignInPanel from "./signInPanel";
+import Profile from "./profile";
 
 const navLinks = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "Articles",
-    href: "/articles",
-  },
-  {
-    label: "Categories",
-    href: "/categories",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
+  { label: "Home", href: "/" },
+  { label: "Articles", href: "/articles" },
+  { label: "Categories", href: "/categories" },
+  { label: "About", href: "/about" },
 ];
 
-const Navbar = () => {
+const Navbar = async () => {
+  const session = await getSession();
+
   return (
     <div className="flex w-full items-center justify-between">
       {/* Logo */}
@@ -65,15 +52,12 @@ const Navbar = () => {
         <Button variant="ghost" size="icon" aria-label="Search">
           <HugeiconsIcon icon={Search01Icon} className="size-5" />
         </Button>
-        {/* Desktop Subscribe */}
-        <Button
-          size="sm"
-          className="hidden sm:inline-flex"
-          render={<Link href="/auth/signup" />}
-          nativeButton={false}
-        >
-          Sign up
-        </Button>
+
+        {/* Desktop User Auth */}
+        <div className="hidden md:block">
+          {session?.user ? <Profile user={session.user} /> : <SignInPanel />}
+        </div>
+
         {/* Mobile Menu */}
         <Sheet>
           <SheetTrigger
@@ -94,25 +78,25 @@ const Navbar = () => {
               <SheetTitle>The Journal.</SheetTitle>
             </SheetHeader>
 
-            <nav className="mt-8 flex flex-col px-3">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="border-b py-4 text-base font-medium"
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div className="mt-8 flex flex-col gap-6 px-3">
+              <nav className="flex flex-col">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="border-b py-4 text-base font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
 
-              <Button
-                className="mt-6 w-full"
-                render={<Link href="/auth/signup" />}
-                nativeButton={false}
-              >
-                Sign up
-              </Button>
-            </nav>
+              {session?.user ? (
+                <Profile user={session.user} />
+              ) : (
+                <SignInPanel className="w-full flex-col items-stretch" />
+              )}
+            </div>
           </SheetContent>
         </Sheet>
       </div>

@@ -102,6 +102,7 @@ const PostPage = async ({ params }: Props) => {
               src={post.thumbnail}
               alt={post.title ?? "Article thumbnail"}
               fill
+              loading="eager"
               sizes="(max-width: 768px) 100vw, 672px"
               className="object-cover"
               priority

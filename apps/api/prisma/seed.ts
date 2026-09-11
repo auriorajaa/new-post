@@ -1,8 +1,8 @@
-import 'dotenv/config';
+import "dotenv/config";
 
-import { faker } from '@faker-js/faker';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
+import { faker } from "@faker-js/faker";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -11,8 +11,8 @@ function generateSlug(title: string): string {
   return title
     .toLowerCase()
     .trim()
-    .replace(/ /g, '-') // replace spaces with hyphens
-    .replace(/[^\w-]+/g, ''); // remove all non-word characters
+    .replace(/ /g, "-") // replace spaces with hyphens
+    .replace(/[^\w-]+/g, ""); // remove all non-word characters
 }
 
 async function main() {
@@ -31,7 +31,7 @@ async function main() {
     title: faker.lorem.sentence(),
     slug: generateSlug(faker.lorem.sentence()),
     content: faker.lorem.paragraphs(3),
-    thumbnail: faker.image.urlLoremFlickr(),
+    thumbnail: faker.image.urlPicsumPhotos(),
     authorId: faker.number.int({ min: 1, max: 10 }),
     published: true,
   }));
@@ -55,7 +55,7 @@ async function main() {
     ),
   );
 
-  console.log('Seeding completed');
+  console.log("Seeding completed");
 }
 
 main()

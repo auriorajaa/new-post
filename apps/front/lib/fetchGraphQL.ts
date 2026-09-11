@@ -19,5 +19,5 @@ export const fetchGraphQL = async (query: string, variables = {}) => {
     return { data: null, errors: result.errors };
   }
 
-  return result.data;
+  return { data: result.data, errors: null };
 };

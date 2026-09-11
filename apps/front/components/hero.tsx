@@ -37,9 +37,10 @@ const Hero = () => {
         <div className="order-1 lg:order-2 lg:col-span-6">
           <div className="relative mx-auto aspect-4/3 w-full max-w-md overflow-hidden rounded-2xl sm:aspect-16/10 sm:max-w-none lg:aspect-4/3">
             <Image
-              src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=872&auto=format&fit=crop"
               fill
               alt="Person working on a creative project"
+              sizes="(max-width: 640px) 448px, (max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
