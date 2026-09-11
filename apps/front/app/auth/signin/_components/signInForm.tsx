@@ -2,9 +2,11 @@
 
 import SubmitButton from "@/components/submitButton";
 import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/lib/actions/auth";
 import { useActionState } from "react";
+import Link from "next/link";
 
 const SignInForm = () => {
   const [state, action] = useActionState(signIn, undefined);
@@ -30,11 +32,18 @@ const SignInForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password">Password</Label>
+          <Link
+            href="/forgot-password"
+            className="text-sm text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           defaultValue={state?.data?.password}
         />
         {!!state?.error?.password && (

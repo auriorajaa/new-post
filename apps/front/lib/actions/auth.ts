@@ -8,6 +8,7 @@ import { CREATE_USER_MUTATION, SIGN_IN_MUTATION } from "../gqlQueries";
 import { redirect } from "next/navigation";
 import { LoginFormSchema } from "../zodSchemas/signInFormSchema";
 import { revalidatePath } from "next/cache";
+import { createSession, deleteSession } from "../session";
 
 export async function signUp(
   state: SignUpFormState,
@@ -29,7 +30,7 @@ export async function signUp(
     },
   });
 
-  if (data.error)
+  if (data.errors)
     return {
       data: Object.fromEntries(formData.entries()),
       message: "Something went wrong",
@@ -65,8 +66,22 @@ export async function signIn(
     };
   }
 
-  // TODO: Saved user session
+  // User session
+  await createSession({
+    user: {
+      id: data.signIn.id,
+      name: data.signIn.name,
+      avatar: data.signIn.avatar,
+    },
+    accessToken: data.signIn.accessToken,
+  });
 
   revalidatePath("/");
+  redirect("/");
+}
+
+export async function signOutAction() {
+  await deleteSession();
+  revalidatePath("/", "layout");
   redirect("/");
 }
