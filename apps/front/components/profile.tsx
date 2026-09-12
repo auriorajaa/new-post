@@ -36,7 +36,11 @@ const Profile = ({ user }: Props) => {
         }
       >
         <Avatar className="size-9">
-          <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
+          <AvatarImage
+            src={user.avatar ?? undefined}
+            alt={user.name}
+            referrerPolicy="no-referrer"
+          />
           <AvatarFallback>
             <HugeiconsIcon icon={UserIcon} className="size-5" />
           </AvatarFallback>
@@ -46,7 +50,11 @@ const Profile = ({ user }: Props) => {
       <PopoverContent align="end" className="w-56 p-2">
         <div className="flex items-center gap-3 px-2 py-1.5">
           <Avatar className="size-8">
-            <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
+            <AvatarImage
+              src={user.avatar ?? undefined}
+              alt={user.name}
+              referrerPolicy="no-referrer"
+            />
             <AvatarFallback>
               <HugeiconsIcon icon={UserIcon} className="size-5" />
             </AvatarFallback>
