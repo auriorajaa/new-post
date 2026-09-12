@@ -13,7 +13,7 @@ export async function GET(req: NextResponse) {
 
   if (!accessToken || !userId || !name) throw new Error("Google oauth failed");
 
-  const res = await fetch(`${BACKEND_URL}/auth/verify-token`, {
+  const res = await fetch(`${BACKEND_URL()}/auth/verify-token`, {
     headers: {
       authorization: `Bearer ${accessToken}`,
     },

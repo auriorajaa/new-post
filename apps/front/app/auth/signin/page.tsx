@@ -56,7 +56,7 @@ const SignInPage = () => {
           variant="outline"
           className="w-full"
           nativeButton={false}
-          render={<Link href={`${BACKEND_URL}/auth/google/login`} />}
+          render={<Link href={`${BACKEND_URL()}/auth/google/login`} />}
         >
           <GoogleIcon />
           Sign in with Google

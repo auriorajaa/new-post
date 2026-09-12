@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
 import DesktopNavbar from "@/components/desktopNavbar";
+import Providers from "./providers";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -36,10 +37,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
     >
       <body className="min-h-full flex flex-col">
-        <DesktopNavbar>
-          <Navbar />
-        </DesktopNavbar>
-        {children}
+        <Providers>
+          <DesktopNavbar>
+            <Navbar />
+          </DesktopNavbar>
+          {children}
+        </Providers>
       </body>
     </html>
   );

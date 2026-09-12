@@ -7,6 +7,7 @@ import DOMPurify from "isomorphic-dompurify";
 
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import Comments from "./_components/comments";
 
 type Props = {
   params: Promise<{
@@ -135,6 +136,8 @@ const PostPage = async ({ params }: Props) => {
           </div>
         )}
       </article>
+
+      <Comments postId={post.id} />
     </main>
   );
 };
