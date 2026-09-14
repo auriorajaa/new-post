@@ -7,6 +7,8 @@ import DOMPurify from "isomorphic-dompurify";
 
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import Comments from "./_components/comments";
+import { getSession } from "@/lib/session";
 
 type Props = {
   params: Promise<{
@@ -17,6 +19,7 @@ type Props = {
 const PostPage = async ({ params }: Props) => {
   const { id } = await params;
   const post = await fetchPostById(Number(id));
+  const session = await getSession();
 
   if (!post) {
     return (
@@ -135,6 +138,8 @@ const PostPage = async ({ params }: Props) => {
           </div>
         )}
       </article>
+
+      <Comments user={session?.user} postId={post.id} />
     </main>
   );
 };

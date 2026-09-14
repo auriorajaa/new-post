@@ -56,11 +56,14 @@ type Query {
   posts(skip: Float, take: Float): [Post!]!
   postCount: Int!
   getPostById(id: Int!): Post!
+  getPostComments(postId: Int!, take: Int = 12, skip: Int = 0): [CommentEntity!]!
+  postCommentCount(postId: Int!): Int!
 }
 
 type Mutation {
   signIn(signInInput: SignInInput!): AuthPayload!
   createUser(createUserInput: CreateUserInput!): User!
+  createComment(createCommentInput: CreateCommentInput!): CommentEntity!
 }
 
 input SignInInput {
@@ -74,4 +77,9 @@ input CreateUserInput {
   email: String!
   bio: String
   avatar: String
+}
+
+input CreateCommentInput {
+  postId: Int!
+  content: String!
 }

@@ -39,6 +39,7 @@ const Hero = () => {
             <Image
               src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=872&auto=format&fit=crop"
               fill
+              loading="eager"
               alt="Person working on a creative project"
               sizes="(max-width: 640px) 448px, (max-width: 1024px) 100vw, 50vw"
               className="object-cover"
