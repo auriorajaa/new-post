@@ -14,15 +14,18 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import CommentCard from "./commentCard";
+import { SessionUser } from "@/lib/session";
+import AddComment from "./addComment";
 
 type Props = {
   postId: number;
+  user?: SessionUser;
 };
 
-const Comments = ({ postId }: Props) => {
+const Comments = ({ postId, user }: Props) => {
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["GET_POST_COMMENTS", postId, page],
     queryFn: async () =>
       await getPostComments({
@@ -35,13 +38,19 @@ const Comments = ({ postId }: Props) => {
   const totalPages = data ? Math.ceil(data.count / DEFAULT_PAGE_SIZE) : 0;
 
   return (
-    <section className="mx-auto mt-10 w-full max-w-6xl sm:mt-10">
+    <section className="mx-auto mt-16 w-full max-w-6xl sm:mt-20">
       <Separator className="mb-10" />
 
-      <div className="mx-auto">
-        <h2 className="text-lg font-semibold">
-          Comments{!isLoading && data ? ` (${data.count})` : ""}
-        </h2>
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold">
+            Comments{!isLoading && data ? ` (${data.count})` : ""}
+          </h2>
+
+          {!!user && (
+            <AddComment user={user} postId={postId} refetch={refetch} />
+          )}
+        </div>
 
         {/* Loading state */}
         {isLoading && (

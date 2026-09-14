@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
 import DesktopNavbar from "@/components/desktopNavbar";
 import Providers from "./providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Navbar />
           </DesktopNavbar>
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

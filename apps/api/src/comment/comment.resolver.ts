@@ -1,7 +1,10 @@
-import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, Int, Context } from "@nestjs/graphql";
 import { CommentService } from "./comment.service.js";
 import { CommentEntity } from "./entities/comment.entity.js";
 import { DEFAULT_PAGE_SIZE } from "../constants.js";
+import { UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard.js";
+import { CreateCommentInput } from "./dto/create-comment.input.js";
 @Resolver(() => CommentEntity)
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
@@ -28,5 +31,16 @@ export class CommentResolver {
   @Query(() => Int)
   postCommentCount(@Args("postId", { type: () => Int! }) postId: number) {
     return this.commentService.count(postId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => CommentEntity)
+  createComment(
+    @Context() Context: any,
+    @Args("createCommentInput") createCommentInput: CreateCommentInput,
+  ) {
+    const authorId = Context.req.user.id;
+
+    return this.commentService.create(createCommentInput, authorId);
   }
 }
