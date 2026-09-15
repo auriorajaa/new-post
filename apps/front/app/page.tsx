@@ -19,7 +19,7 @@ export default async function Home({ searchParams }: Props) {
   });
 
   const session = await getSession();
-  console.log("user: ", session);
+  // console.log("user: ", session);
 
   return (
     <main>
