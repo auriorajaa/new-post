@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Comments from "./_components/comments";
 import { getSession } from "@/lib/session";
+import Like from "./_components/like";
 
 type Props = {
   params: Promise<{
@@ -139,6 +140,7 @@ const PostPage = async ({ params }: Props) => {
         )}
       </article>
 
+      <Like postId={post.id} user={session?.user} />
       <Comments user={session?.user} postId={post.id} />
     </main>
   );
