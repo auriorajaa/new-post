@@ -2,8 +2,8 @@
 
 import { print } from "graphql";
 
-import { fetchGraphQL } from "../fetchGraphQL";
-import { GET_POST_BY_ID, GET_POSTS } from "../gqlQueries";
+import { authFetchGraphQL, fetchGraphQL } from "../fetchGraphQL";
+import { GET_POST_BY_ID, GET_POSTS, GET_USER_POSTS } from "../gqlQueries";
 import { Post } from "../types/modelTypes";
 import { transformTakeSkip } from "../helpers";
 
@@ -46,3 +46,28 @@ export const fetchPostById = async (id: number) => {
 
   return data.getPostById as Post;
 };
+
+export async function fetchUserPosts({
+  page,
+  pageSize,
+}: {
+  page?: number;
+  pageSize: number;
+}) {
+  const { take, skip } = transformTakeSkip({ page, pageSize });
+
+  const {data, errors} = await authFetchGraphQL(print(GET_USER_POSTS), {
+    take,
+    skip,
+  });
+
+  if (errors) {
+    console.error("Failed to fetch user post:", errors)
+    return { posts: [], totalPosts: 0};
+  }
+
+  return {
+    posts: data.getUserPosts as Post[],
+    totalPosts: data.userPostCount as number,
+  }
+}
