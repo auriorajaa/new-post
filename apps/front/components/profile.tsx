@@ -20,7 +20,7 @@ type Props = {
 
 const menuItems = [
   { href: "/user/create-post", label: "Create post", icon: NoteAddIcon },
-  { href: "/user/your-posts", label: "Your posts", icon: BookEditIcon },
+  { href: "/user/posts", label: "Your posts", icon: BookEditIcon },
 ];
 
 const Profile = ({ user }: Props) => {

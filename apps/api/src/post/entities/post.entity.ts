@@ -2,6 +2,14 @@ import { ObjectType, Field, Int } from "@nestjs/graphql";
 import { User } from "../../user/entities/user.entity.js";
 import { Tag } from "../../tag/entities/tag.entity.js";
 import { CommentEntity } from "../../comment/entities/comment.entity.js";
+@ObjectType()
+export class Count {
+  @Field(() => Int)
+  likes: number;
+
+  @Field(() => Int)
+  comments: number;
+}
 
 @ObjectType()
 export class Post {
@@ -37,4 +45,7 @@ export class Post {
 
   @Field(() => [CommentEntity])
   comments: CommentEntity[];
+
+  @Field(() => Count)
+  _count: Count;
 }
