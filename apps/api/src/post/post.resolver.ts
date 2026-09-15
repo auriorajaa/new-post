@@ -18,7 +18,7 @@ export class PostResolver {
     @Args("take", { nullable: true }) take?: number,
   ) {
     const user = context.req.user;
-    console.log({ user });
+    // console.log({ user });
     return this.postService.findAll({ skip, take });
   }
 
