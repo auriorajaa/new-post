@@ -38,7 +38,7 @@ export type PostFormState =
         tags?: string;
         isPublished?: string;
       };
-      errors: {
+      errors?: {
         title?: string[];
         content?: string[];
         thumbnail?: string[];
