@@ -1,7 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service.js";
 import { DEFAULT_PAGE_SIZE } from "../constants.js";
 import { CreatePostInput } from "./dto/create-post.input.js";
+import { UpdatePostInput } from "./dto/update-post.input.js";
 
 @Injectable()
 export class PostService {
@@ -93,6 +94,36 @@ export class PostService {
         },
         tags: {
           connectOrCreate: createPostInput.tags.map((tag) => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
+        },
+      },
+    });
+  }
+
+  async update({
+    userId,
+    updatePostInput,
+  }: {
+    userId: number;
+    updatePostInput: UpdatePostInput;
+  }) {
+    const authorIdMatched = await this.prisma.post.findUnique({
+      where: { id: updatePostInput.postId, suthorId: userId },
+    });
+
+    if (!authorIdMatched) throw new UnauthorizedException();
+
+    return await this.prisma.post.update({
+      where: {
+        id: updatePostInput.postId,
+      },
+      data: {
+        ...updatePostInput,
+        tags: {
+          set: [],
+          connectOrCreate: updatePostInput.tags?.map((tag) => ({
             where: { name: tag },
             create: { name: tag },
           })),

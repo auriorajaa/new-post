@@ -100,8 +100,6 @@ export async function saveNewPost(
   if (validatedFields.data.thumbnail)
     thumbnailUrl = await uploadThumbnail(validatedFields.data.thumbnail);
 
-  // TODO: Call graphql api
-
   const data = await authFetchGraphQL(print(CREATE_POST_MUTATION), {
     input: {
       ...validatedFields.data,
@@ -115,4 +113,23 @@ export async function saveNewPost(
     message: "Something went wrong",
     data: Object.fromEntries(formData.entries()),
   };
+}
+
+export async function updatePost(
+  state: PostFormState,
+  formData: FormData,
+): Promise<PostFormState> {
+  const validatedFields = PostFormSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success)
+    return {
+      data: Object.fromEntries(formData.entries()),
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+
+  const postId = formData.get("postId");
+
+  
 }

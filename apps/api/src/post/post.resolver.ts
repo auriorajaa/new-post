@@ -5,6 +5,7 @@ import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard.js";
 import { DEFAULT_PAGE_SIZE } from "../constants.js";
 import { CreatePostInput } from "./dto/create-post.input.js";
+import { UpdatePostInput } from "./dto/update-post.input.js";
 
 @Resolver(() => Post)
 export class PostResolver {
@@ -65,5 +66,16 @@ export class PostResolver {
     const authorId = context.req.user.id;
 
     return this.postService.create({ createPostInput, authorId });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Post)
+  updatePost(
+    @Context() context: any,
+    @Args("updatePostInput") updatePostInput: UpdatePostInput,
+  ) {
+    const userId = context.req.user.id;
+
+    return this.postService.update({ userId, updatePostInput });
   }
 }
