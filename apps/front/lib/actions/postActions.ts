@@ -3,9 +3,17 @@
 import { print } from "graphql";
 
 import { authFetchGraphQL, fetchGraphQL } from "../fetchGraphQL";
-import { GET_POST_BY_ID, GET_POSTS, GET_USER_POSTS } from "../gqlQueries";
+import {
+  CREATE_POST_MUTATION,
+  GET_POST_BY_ID,
+  GET_POSTS,
+  GET_USER_POSTS,
+} from "../gqlQueries";
 import { Post } from "../types/modelTypes";
 import { transformTakeSkip } from "../helpers";
+import { PostFormState } from "../types/formState";
+import { PostFormSchema } from "../zodSchemas/postFormSchema";
+import { uploadThumbnail } from "../upload";
 
 export const fetchPosts = async ({
   page,
@@ -56,18 +64,55 @@ export async function fetchUserPosts({
 }) {
   const { take, skip } = transformTakeSkip({ page, pageSize });
 
-  const {data, errors} = await authFetchGraphQL(print(GET_USER_POSTS), {
+  const { data, errors } = await authFetchGraphQL(print(GET_USER_POSTS), {
     take,
     skip,
   });
 
   if (errors) {
-    console.error("Failed to fetch user post:", errors)
-    return { posts: [], totalPosts: 0};
+    console.error("Failed to fetch user post:", errors);
+    return { posts: [], totalPosts: 0 };
   }
 
   return {
     posts: data.getUserPosts as Post[],
     totalPosts: data.userPostCount as number,
-  }
+  };
+}
+
+export async function saveNewPost(
+  state: PostFormState,
+  formData: FormData,
+): Promise<PostFormState> {
+  const validatedFields = PostFormSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success)
+    return {
+      data: Object.fromEntries(formData.entries()),
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+
+  let thumbnailUrl = "";
+
+  // Uplaod thumbnail to supabase
+  if (validatedFields.data.thumbnail)
+    thumbnailUrl = await uploadThumbnail(validatedFields.data.thumbnail);
+
+  // TODO: Call graphql api
+
+  const data = await authFetchGraphQL(print(CREATE_POST_MUTATION), {
+    input: {
+      ...validatedFields.data,
+      thumbnail: thumbnailUrl,
+    },
+  });
+
+  if (data) return { message: "Success. Your post is saved", ok: true };
+
+  return {
+    message: "Something went wrong",
+    data: Object.fromEntries(formData.entries()),
+  };
 }
