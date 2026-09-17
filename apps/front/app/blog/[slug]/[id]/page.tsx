@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import Comments from "./_components/comments";
 import { getSession } from "@/lib/session";
 import Like from "./_components/like";
+import SafeHtml from "./_components/safeHtml";
 
 type Props = {
   params: Promise<{
@@ -114,7 +115,10 @@ const PostPage = async ({ params }: Props) => {
         )}
 
         {/* Content */}
-        <div className="mt-8 text-base leading-8 whitespace-pre-line text-foreground sm:mt-10 sm:text-lg sm:leading-9" />
+        <SafeHtml
+          html={post.content}
+          className="mt-8 text-base leading-8 whitespace-pre-line text-foreground sm:mt-10 sm:text-lg sm:leading-9"
+        />
 
         {/* Footer */}
         {post.tags && post.tags.length > 0 && (
