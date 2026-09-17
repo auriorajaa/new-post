@@ -1,5 +1,6 @@
 packages:
   - "apps/*"
+  - "packages/*"
 allowBuilds:
   '@apollo/protobufjs': true
   '@prisma/engines': true
@@ -9,3 +10,4 @@ allowBuilds:
   prisma: true
   unrs-resolver: true
   workerd: false
+pmOnFail: ignore
