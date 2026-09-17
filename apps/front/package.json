@@ -18,7 +18,8 @@
     "cn": "^0.2.6",
     "graphql": "^17.0.2",
     "graphql-tag": "^2.12.7",
-    "isomorphic-dompurify": "^4.2.0",
+    "html-encoding-sniffer": "4.0.0",
+    "isomorphic-dompurify": "^2.22.0",
     "jose": "^6.2.12",
     "jsdom": "27.0.0",
     "next": "16.3.4",
@@ -40,5 +41,10 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@12.3.3"
+  "packageManager": "pnpm@12.3.3",
+  "pnpm": {
+    "overrides": {
+      "html-encoding-sniffer": "4.0.0"
+    }
+  }
 }

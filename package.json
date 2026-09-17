@@ -15,5 +15,10 @@
   "type": "module",
   "devDependencies": {
     "turbo": "^2.10.12"
+  },
+  "pnpm": {
+    "overrides": {
+      "jsdom": "24.1.3"
+    }
   }
 }
