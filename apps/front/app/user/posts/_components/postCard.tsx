@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Post } from "@/lib/types/modelTypes";
-// import { deletePost } from "@/lib/actions/postActions";
+import { deletePost } from "@/lib/actions/postActions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -53,32 +53,31 @@ const PostCard = ({ post }: Props) => {
     year: "numeric",
   });
 
-  // const handleDelete = async () => {
-  //   setIsDeleting(true);
-  //   try {
-  //     await deletePost(post.id);
-  //     toast.success("Post deleted");
-  //     router.refresh();
-  //   } catch {
-  //     toast.error("Failed to delete post");
-  //   } finally {
-  //     setIsDeleting(false);
-  //     setDeleteOpen(false);
-  //   }
-  // };
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deletePost(post.id);
+      toast.success("Post deleted");
+      setDeleteOpen(false);
+      router.refresh();
+    } catch {
+      toast.error("Failed to delete post");
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <>
       <Card className="overflow-hidden py-0">
         <CardContent className="flex gap-4 p-4 sm:gap-5">
           {/* Thumbnail */}
-          <div className="relative aspect-square size-20 shrink-0 overflow-hidden rounded-2-xl bg-muted sm:size-24">
+          <div className="relative aspect-square size-20 shrink-0 overflow-hidden rounded-2xl bg-muted sm:size-24">
             {post.thumbnail ? (
               <Image
                 src={post.thumbnail}
                 alt={post.title}
                 fill
-                className="object-cover rounded-2xl"
+                className="rounded-2xl object-cover"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
@@ -134,7 +133,7 @@ const PostCard = ({ post }: Props) => {
                     View
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    render={<Link href={`/user/posts/${post.id}/edit`} />}
+                    render={<Link href={`/user/posts/${post.id}/update`} />}
                   >
                     <HugeiconsIcon icon={PencilEdit02Icon} className="size-4" />
                     Edit
@@ -165,7 +164,12 @@ const PostCard = ({ post }: Props) => {
         </CardContent>
       </Card>
 
-      {/* <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+      <AlertDialog
+        open={deleteOpen}
+        onOpenChange={(open) => {
+          if (!isDeleting) setDeleteOpen(open);
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this post?</AlertDialogTitle>
@@ -177,15 +181,18 @@ const PostCard = ({ post }: Props) => {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleDelete}
               disabled={isDeleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventBaseUIHandler();
+                handleDelete();
+              }}
+              className="bg-destructive text-white hover:bg-destructive/90"
             >
               {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog> */}
+      </AlertDialog>
     </>
   );
 };

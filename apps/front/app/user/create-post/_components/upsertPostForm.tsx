@@ -22,6 +22,14 @@ type Props = {
 const UpsertPostForm = ({ state, formAction }: Props) => {
   const [imageUrl, setImageUrl] = useState("");
   const [fileName, setFileName] = useState("");
+  const [existingThumbnailRemoved, setExistingThumbnailRemoved] =
+    useState(false);
+
+  const previousThumbnailUrl = existingThumbnailRemoved
+    ? undefined
+    : state?.data?.previousThumbnailUrl;
+
+  const displayedThumbnail = imageUrl || previousThumbnailUrl;
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,16 +42,28 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
   const clearThumbnail = () => {
     setImageUrl("");
     setFileName("");
+    setExistingThumbnailRemoved(true);
   };
 
   return (
     <Card className="mx-auto w-full max-w-6xl">
       <CardContent className="p-4 sm:p-6">
-        <form action={formAction} className="space-y-6">
+        <form
+          key={state?.data ? JSON.stringify(state.data) : "initial"}
+          action={formAction}
+          className="space-y-6"
+        >
+          <input hidden name="postId" defaultValue={state?.data?.postId} />
+
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
-            <Input id="title" name="title" placeholder="Title of your post" />
+            <Input
+              id="title"
+              name="title"
+              placeholder="Title of your post"
+              defaultValue={state?.data?.title}
+            />
             {!!state?.errors?.title && (
               <p className="text-sm text-destructive">{state.errors.title}</p>
             )}
@@ -57,6 +77,7 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
               name="content"
               placeholder="Your post content goes here..."
               rows={8}
+              defaultValue={state?.data?.content}
             />
             {!!state?.errors?.content && (
               <p className="text-sm text-destructive">{state.errors.content}</p>
@@ -67,10 +88,10 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
           <div className="space-y-2">
             <Label htmlFor="thumbnail">Thumbnail</Label>
 
-            {imageUrl ? (
+            {displayedThumbnail ? (
               <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
                 <Image
-                  src={imageUrl}
+                  src={displayedThumbnail}
                   alt="Thumbnail preview"
                   fill
                   unoptimized
@@ -84,9 +105,11 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
                 >
                   <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
                 </button>
-                <div className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/60 to-transparent px-3 py-2 text-xs text-white">
-                  {fileName}
-                </div>
+                {fileName && (
+                  <div className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/60 to-transparent px-3 py-2 text-xs text-white">
+                    {fileName}
+                  </div>
+                )}
               </div>
             ) : (
               <label
@@ -115,6 +138,11 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
               className="sr-only"
             />
 
+            {/* Signals to the server action that the existing thumbnail should be cleared */}
+            {existingThumbnailRemoved && !imageUrl && (
+              <input type="hidden" name="removeThumbnail" value="true" />
+            )}
+
             {!!state?.errors?.thumbnail && (
               <p className="text-sm text-destructive">
                 {state.errors.thumbnail}
@@ -125,12 +153,20 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
           {/* Tags */}
           <div className="space-y-2">
             <Label htmlFor="tags">Tags</Label>
-            <TagsInput name="tags" error={state?.errors?.tags?.[0]} />
+            <TagsInput
+              name="tags"
+              initialTags={state?.data?.tags}
+              error={state?.errors?.tags?.[0]}
+            />
           </div>
 
           {/* Publish toggle */}
           <div className="flex items-start gap-3 rounded-lg border p-3">
-            <Checkbox name="published" className="mt-0.5" />
+            <Checkbox
+              name="published"
+              className="mt-0.5"
+              defaultChecked={state?.data?.published === "on"}
+            />
             <label htmlFor={undefined} className="grid cursor-pointer gap-1">
               <span className="text-sm font-medium leading-none">
                 Publish now
@@ -140,10 +176,8 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
               </span>
             </label>
           </div>
-          {!!state?.errors?.isPublished && (
-            <p className="text-sm text-destructive">
-              {state.errors.isPublished}
-            </p>
+          {!!state?.errors?.published && (
+            <p className="text-sm text-destructive">{state.errors.published}</p>
           )}
 
           <SubmitButton className="w-full sm:w-auto">Save</SubmitButton>

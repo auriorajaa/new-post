@@ -78,4 +78,15 @@ export class PostResolver {
 
     return this.postService.update({ userId, updatePostInput });
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  deletePost(
+    @Context() context: any,
+    @Args("postId", { type: () => Int }) postId: number,
+  ) {
+    const userId = context.req.user.id;
+
+    return this.postService.delete({ postId, userId });
+  }
 }

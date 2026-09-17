@@ -5,15 +5,18 @@ import { print } from "graphql";
 import { authFetchGraphQL, fetchGraphQL } from "../fetchGraphQL";
 import {
   CREATE_POST_MUTATION,
+  DELETE_POST_MUTATION,
   GET_POST_BY_ID,
   GET_POSTS,
   GET_USER_POSTS,
+  UPDATE_POST_MUTATION,
 } from "../gqlQueries";
 import { Post } from "../types/modelTypes";
 import { transformTakeSkip } from "../helpers";
 import { PostFormState } from "../types/formState";
 import { PostFormSchema } from "../zodSchemas/postFormSchema";
 import { uploadThumbnail } from "../upload";
+import { input } from "zod";
 
 export const fetchPosts = async ({
   page,
@@ -129,7 +132,31 @@ export async function updatePost(
       errors: validatedFields.error.flatten().fieldErrors,
     };
 
-  const postId = formData.get("postId");
+  const { thumbnail, ...inputs } = validatedFields.data;
 
-  
+  let thumbnailUrl = "";
+
+  if (thumbnail) thumbnailUrl = await uploadThumbnail(thumbnail);
+
+  const data = await authFetchGraphQL(print(UPDATE_POST_MUTATION), {
+    input: {
+      ...inputs,
+      ...(thumbnailUrl && { thumbnail: thumbnailUrl }),
+    },
+  });
+
+  if (data) return { message: "Success. Your post is updated", ok: true };
+
+  return {
+    message: "Something went wrong",
+    data: Object.fromEntries(formData.entries()),
+  };
+}
+
+export async function deletePost(postId: number) {
+  const {data} = await authFetchGraphQL(print(DELETE_POST_MUTATION), {
+    postId,
+  });
+
+  return data.deletePost;
 }

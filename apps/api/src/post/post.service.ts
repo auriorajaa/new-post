@@ -110,17 +110,19 @@ export class PostService {
     updatePostInput: UpdatePostInput;
   }) {
     const authorIdMatched = await this.prisma.post.findUnique({
-      where: { id: updatePostInput.postId, suthorId: userId },
+      where: { id: updatePostInput.postId, authorId: userId },
     });
 
     if (!authorIdMatched) throw new UnauthorizedException();
+
+    const { postId, ...data } = updatePostInput;
 
     return await this.prisma.post.update({
       where: {
         id: updatePostInput.postId,
       },
       data: {
-        ...updatePostInput,
+        ...data,
         tags: {
           set: [],
           connectOrCreate: updatePostInput.tags?.map((tag) => ({
@@ -130,5 +132,22 @@ export class PostService {
         },
       },
     });
+  }
+
+  async delete({ postId, userId }: { postId: number; userId: number }) {
+    const authorIdMatched = await this.prisma.post.findUnique({
+      where: { id: postId, authorId: userId },
+    });
+
+    if (!authorIdMatched) throw new UnauthorizedException();
+
+    const result = await this.prisma.post.delete({
+      where: {
+        id: postId,
+        authorId: userId,
+      },
+    });
+
+    return !!result;  
   }
 }
