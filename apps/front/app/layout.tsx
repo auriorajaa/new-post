@@ -19,13 +19,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// const SITE_URL = "https://thejournal.example.com";
+const SITE_URL = "https://the-post-journal.vercel.app";
 const SITE_NAME = "The Journal";
 const SITE_DESCRIPTION =
   "The Journal is a publication for ideas, stories, and perspectives on technology, creativity, and culture.";
 
 export const metadata: Metadata = {
-  // metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${SITE_NAME} — Ideas worth reading`,
     template: `%s | ${SITE_NAME}`,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    // url: SITE_URL,
+    url: SITE_URL,
     siteName: SITE_NAME,
     title: `${SITE_NAME} — Ideas worth reading`,
     description: SITE_DESCRIPTION,
