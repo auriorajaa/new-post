@@ -2,8 +2,13 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": ["BACKEND_URL"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "BACKEND_URL",
+        "SESSION_SECRET_KEY",
+        "SUPABASE_URL",
+        "SUPABASE_API_KEY"
+      ]
     },
     "lint": {},
     "dev": {
