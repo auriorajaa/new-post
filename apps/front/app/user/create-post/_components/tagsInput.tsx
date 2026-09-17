@@ -8,10 +8,18 @@ import { cn } from "cn";
 type Props = {
   name: string;
   error?: string;
+  initialTags?: string;
 };
 
-const TagsInput = ({ name, error }: Props) => {
-  const [tags, setTags] = useState<string[]>([]);
+const TagsInput = ({ name, error, initialTags }: Props) => {
+  const [tags, setTags] = useState<string[]>(() =>
+    initialTags
+      ? initialTags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : [],
+  );
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
