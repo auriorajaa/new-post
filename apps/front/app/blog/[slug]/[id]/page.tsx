@@ -3,7 +3,6 @@ import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
-import DOMPurify from "isomorphic-dompurify";
 
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -115,10 +114,7 @@ const PostPage = async ({ params }: Props) => {
         )}
 
         {/* Content */}
-        <div
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-          className="mt-8 text-base leading-8 whitespace-pre-line text-foreground sm:mt-10 sm:text-lg sm:leading-9"
-        />
+        <div className="mt-8 text-base leading-8 whitespace-pre-line text-foreground sm:mt-10 sm:text-lg sm:leading-9" />
 
         {/* Footer */}
         {post.tags && post.tags.length > 0 && (
